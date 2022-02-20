@@ -10,8 +10,10 @@ import io.micronaut.core.annotation.Indexed;
 import io.micronaut.data.jpa.repository.JpaRepository;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
+import lombok.extern.slf4j.Slf4j;
 import transaction.manager.domain.entity.generic.EntityDomain;
 
+@Slf4j
 @Indexed(AbstractCrudService.class)
 public abstract class AbstractCrudService<E extends EntityDomain> implements CrudService<E> {
 
@@ -19,6 +21,7 @@ public abstract class AbstractCrudService<E extends EntityDomain> implements Cru
     @Override
     @Transactional
     public E save(@Valid @Nonnull final E entity) {
+        log.trace("save repositoryType={}", getRepository().getClass().getName());
         return getRepository().save(entity);
     }
 
@@ -26,6 +29,7 @@ public abstract class AbstractCrudService<E extends EntityDomain> implements Cru
     @Override
     @Transactional
     public Optional<E> findById(@Nonnull final UUID id) {
+        log.trace("findById repositoryType={} id={}", getRepository().getClass().getName(), id);
         return getRepository().findById(id);
     }
 
@@ -33,6 +37,7 @@ public abstract class AbstractCrudService<E extends EntityDomain> implements Cru
     @Override
     @Transactional
     public Page<E> findAll(@Nonnull final Pageable pageable) {
+        log.trace("findById repositoryType={} page={} offset={}", getRepository().getClass().getName(), pageable.getNumber(), pageable.getOffset());
         return getRepository().findAll(pageable);
     }
 

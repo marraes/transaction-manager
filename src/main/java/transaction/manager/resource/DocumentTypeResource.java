@@ -14,6 +14,7 @@ import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.data.model.Sort;
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 import transaction.manager.domain.entity.DocumentType;
 import transaction.manager.domain.entity.DocumentType_;
 import transaction.manager.domain.record.DocumentTypeRecord;
@@ -21,6 +22,7 @@ import transaction.manager.domain.record.ResponseCollection;
 import transaction.manager.mapper.DocumentTypeMapper;
 import transaction.manager.service.DocumentTypeService;
 
+@Slf4j
 @Path(ROOT)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -40,6 +42,7 @@ public class DocumentTypeResource {
     @GET
     @Path(DOCUMENT_TYPE_RESOURCE)
     public ResponseCollection<DocumentTypeRecord> list() {
+        log.info("test");
         final Page<DocumentType> documentTypePage = documentTypeService.findAll(UNPAGED_BY_CODE);
         final List<DocumentType> documentTypes = documentTypePage.getContent();
         final List<DocumentTypeRecord> documentTypeRecords = documentTypeMapper.map(documentTypes);

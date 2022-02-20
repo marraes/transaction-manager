@@ -43,3 +43,9 @@ flyway:
 endpoints:
   health:
     enabled: true
+
+tracing:
+  zipkin:
+    enabled: true
+  exclusions:
+    - /health

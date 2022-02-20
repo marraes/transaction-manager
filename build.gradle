@@ -28,6 +28,7 @@ dependencies {
     implementation 'io.micronaut.data:micronaut-data-hibernate-jpa'
     implementation 'io.micronaut.flyway:micronaut-flyway'
     implementation 'io.micronaut.jaxrs:micronaut-jaxrs-server'
+    implementation 'io.micronaut:micronaut-tracing'
 
     runtimeOnly 'io.micronaut.sql:micronaut-jdbc-hikari'
 
@@ -41,6 +42,7 @@ dependencies {
     implementation 'com.github.spotbugs:spotbugs-annotations:4.5.3'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    implementation 'io.opentracing.brave:brave-opentracing:1.0.0'
 
     runtimeOnly 'ch.qos.logback:logback-classic:1.2.10'
     runtimeOnly 'org.postgresql:postgresql:42.3.2'

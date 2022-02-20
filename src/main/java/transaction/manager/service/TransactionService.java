@@ -13,6 +13,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import transaction.manager.domain.entity.Account;
 import transaction.manager.domain.entity.Transaction;
 import transaction.manager.domain.entity.TransactionStatus;
@@ -24,6 +25,7 @@ import transaction.manager.repository.TransactionRepository;
 import transaction.manager.resolver.TransactionAmountResolver;
 import transaction.manager.service.generic.AbstractCrudService;
 
+@Slf4j
 @Singleton
 public class TransactionService extends AbstractCrudService<Transaction> {
 
@@ -54,12 +56,13 @@ public class TransactionService extends AbstractCrudService<Transaction> {
             @Nonnull final UUID accountId,
             @Nonnull final TransactionRegisterRequestRecord transactionData
     ) throws EntityNotFoundException {
+        log.info("registerTransaction step=start accountId={} params={}", accountId, transactionData);
         final Instant eventDate = Instant.now();
 
         final TransactionRegistrationRequiredData transactionParams = fetchTransactionParamsData(accountId, transactionData);
         final BigDecimal resolvedAmount = transactionAmountResolver.resolveTransactionAmount(transactionParams.transactionType().getOperation(), transactionData.amount());
 
-        final Transaction transaction = Transaction.builder()
+        Transaction transaction = Transaction.builder()
                 .eventDate(eventDate)
                 .amount(resolvedAmount)
                 .installments(transactionData.installments())
@@ -68,7 +71,9 @@ public class TransactionService extends AbstractCrudService<Transaction> {
                 .account(transactionParams.account())
                 .build();
 
-        save(transaction);
+        transaction = save(transaction);
+
+        log.info("registerTransaction step=end accountId={} transactionId={} params={}", accountId, transaction.getId(), transactionData);
     }
 
     private TransactionRegistrationRequiredData fetchTransactionParamsData(

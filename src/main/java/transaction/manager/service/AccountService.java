@@ -8,12 +8,14 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import transaction.manager.domain.entity.Account;
 import transaction.manager.domain.entity.Customer;
 import transaction.manager.exception.EntityNotFoundException;
 import transaction.manager.repository.AccountRepository;
 import transaction.manager.service.generic.AbstractCrudService;
 
+@Slf4j
 @Singleton
 public class AccountService extends AbstractCrudService<Account> {
 
@@ -31,19 +33,25 @@ public class AccountService extends AbstractCrudService<Account> {
     @Nonnull
     @Transactional
     public Account createAccount(@Nonnull final UUID customerId, @Nonnull final String accountNumber) throws EntityNotFoundException {
+        log.info("createAccount step=start customerId={}", customerId);
         final Customer customer = customerService.findById(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Not found customer"));
-        final Account account = Account.builder()
+        Account account = Account.builder()
                 .accountNumber(accountNumber)
                 .customer(customer)
                 .build();
 
-        return getRepository().save(account);
+        account = getRepository().save(account);
+
+        log.info("createAccount step=end customerId={} accountId={}", customerId, account.getId());
+
+        return account;
     }
 
     @Nonnull
     @Transactional
     public Account findByCustomerAndAccount(@Nonnull final UUID customerId, @Nonnull final UUID accountId) throws EntityNotFoundException {
+        log.trace("findByCustomerAndAccount customerId={} accountId={}", customerId, accountId);
         return getRepository().findByCustomerIdAndId(customerId, accountId)
                 .orElseThrow(EntityNotFoundException::new);
     }
