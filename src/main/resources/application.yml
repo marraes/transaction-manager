@@ -1,0 +1,45 @@
+micronaut:
+  server:
+    port: 8080
+    locale-resolution:
+      default-locale: pt_BR
+  application:
+    name: transaction-manager
+    default-charset: UTF-8
+
+netty:
+  default:
+    allocator:
+      max-order: 3
+
+datasources:
+  default:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driverClassName: org.postgresql.Driver
+    schema-generate: NONE
+    dialect: POSTGRES
+
+jpa:
+  default:
+    entity-scan:
+      packages:
+        - transaction.manager.domain.entity
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        hbm2ddl:
+          auto: none
+        show_sql: false
+        format_sql: false
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+
+endpoints:
+  health:
+    enabled: true

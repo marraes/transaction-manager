@@ -1,0 +1,89 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.1'
+    id 'io.micronaut.application' version '3.2.1'
+    id "org.flywaydb.flyway" version "8.4.4"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.22' //need to be first because data https://micronaut-projects.github.io/micronaut-data/latest/guide/#buildConfig
+    annotationProcessor 'org.hibernate:hibernate-jpamodelgen:5.6.5.Final'
+
+    //region Micronaut dependencies
+    annotationProcessor 'io.micronaut:micronaut-http-validation'
+    annotationProcessor 'io.micronaut:micronaut-inject-java'
+    annotationProcessor 'io.micronaut.data:micronaut-data-processor'
+    annotationProcessor 'io.micronaut.jaxrs:micronaut-jaxrs-processor'
+
+    implementation 'io.micronaut:micronaut-runtime'
+    implementation 'io.micronaut:micronaut-http-client'
+    implementation 'io.micronaut:micronaut-validation'
+    implementation 'io.micronaut:micronaut-jackson-databind'
+    implementation 'io.micronaut:micronaut-management'
+
+    implementation 'io.micronaut.data:micronaut-data-hibernate-jpa'
+    implementation 'io.micronaut.flyway:micronaut-flyway'
+    implementation 'io.micronaut.jaxrs:micronaut-jaxrs-server'
+
+    runtimeOnly 'io.micronaut.sql:micronaut-jdbc-hikari'
+
+    testImplementation 'io.micronaut.test:micronaut-test-junit5'
+    //endregion
+
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
+    implementation 'javax.inject:javax.inject:1' // jarkarta supports in mapstruct will be released in 1.5.0
+    implementation 'com.github.spotbugs:spotbugs-annotations:4.5.3'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+
+    runtimeOnly 'ch.qos.logback:logback-classic:1.2.10'
+    runtimeOnly 'org.postgresql:postgresql:42.3.2'
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+}
+
+
+application {
+    mainClass.set('transaction.manager.Application')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+graalvmNative.toolchainDetection = false
+
+micronaut {
+    version micronautVersion
+    runtime 'netty'
+    testRuntime 'junit5'
+    processing {
+        incremental(true)
+        annotations('transaction.manager.*')
+    }
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs = [
+            '-Amapstruct.suppressGeneratorTimestamp=true',
+            '-Amapstruct.suppressGeneratorVersionInfoComment=true',
+            '-Amapstruct.unmappedTargetPolicy=IGNORE',
+            '-Amapstruct.defaultComponentModel=jsr330',
+            '-Amapstruct.verbose=false',
+            '-Amapstruct.defaultInjectionStrategy=constructor',
+    ]
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
