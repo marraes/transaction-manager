@@ -13,7 +13,6 @@ import transaction.manager.domain.dto.ApiError;
 @Singleton
 public class ClientErrorExceptionHandler implements ExceptionHandler<ClientErrorException, Response> {
 
-
     @Override
     public Response handle(HttpRequest request, ClientErrorException exception) {
         final int statusCode = exception.getResponse().getStatus();
