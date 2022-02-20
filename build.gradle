@@ -89,3 +89,7 @@ compileJava {
 compileTestJava {
     options.encoding = 'UTF-8'
 }
+
+flyway {
+    configFiles = ['conf/flyway.conf']
+}
