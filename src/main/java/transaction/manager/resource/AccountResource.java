@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.micronaut.core.annotation.Introspected;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import transaction.manager.domain.entity.Account;
 import transaction.manager.domain.record.AccountRecord;
@@ -28,6 +29,7 @@ import transaction.manager.mapper.AccountMapper;
 import transaction.manager.service.AccountService;
 
 @Path(ROOT)
+@Tag(name = "Accounts")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountResource {

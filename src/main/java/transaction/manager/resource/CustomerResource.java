@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import org.apache.commons.lang3.ObjectUtils;
 import transaction.manager.domain.entity.Customer;
@@ -22,6 +23,7 @@ import transaction.manager.mapper.CustomerMapper;
 import transaction.manager.service.CustomerService;
 
 @Path(ROOT)
+@Tag(name = "Customers")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class CustomerResource {

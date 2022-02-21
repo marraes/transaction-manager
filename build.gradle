@@ -18,6 +18,8 @@ dependencies {
     annotationProcessor 'io.micronaut:micronaut-inject-java'
     annotationProcessor 'io.micronaut.data:micronaut-data-processor'
     annotationProcessor 'io.micronaut.jaxrs:micronaut-jaxrs-processor'
+    annotationProcessor 'io.micronaut.openapi:micronaut-openapi'
+    annotationProcessor 'io.micronaut:micronaut-management'
 
     implementation 'io.micronaut:micronaut-runtime'
     implementation 'io.micronaut:micronaut-http-client'
@@ -43,6 +45,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     implementation 'io.opentracing.brave:brave-opentracing:1.0.0'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.1.13'
 
     runtimeOnly 'ch.qos.logback:logback-classic:1.2.10'
     runtimeOnly 'org.postgresql:postgresql:42.3.2'
@@ -84,6 +87,14 @@ compileJava {
             '-Amapstruct.verbose=false',
             '-Amapstruct.defaultInjectionStrategy=constructor',
     ]
+}
+
+sourceSets {
+    main {
+        java {
+            output.dir "$buildDir/resources/swagger", builtBy: 'compileJava'
+        }
+    }
 }
 
 compileTestJava {

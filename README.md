@@ -44,11 +44,29 @@ export POSTGRES_PASSWORD=admin
 Para executar com docker já existe um script com a especificação do docker compose, configurando o postgres junto
 não sendo necessário já possuir o mesmo executando, sendo o único requisito é que as portas 8080 e 5432 não estejam em uso.
 
-Para rodar bastar executar no terminal dentro do diretório raiz do projeto:
+Para buildar e rodar a app bastar executar no terminal dentro do diretório raiz do projeto o seguint script:
 ```shell
 bash run-docker.sh
+```
+
+Se preferir realizar um clean antes do build, pode ser passado o parâmetro `-c`, ficando da seguinte forma:
+```shell
+bash run-docker.sh -c
 ```
 
 Dessa forma será realizado o build da aplicação, gerado o jar com o plugin `shadowJar, 
 o download do container do postgres na versão 14 e uma imagem base com jre 17 da Temurin
 (antiga Adoptium) da Eclipse, no qual será gerado um container com a aplicação. 
+
+Observações:
+O container do postgres mapeia um volume chamado no diretório `/opt/postgres-data`, para manter os dados 
+salvos mesmo após reinicializar o container.
+
+---
+
+## Especificação das APIs
+Caso deseje verificar as especificações das APIs da aplicação, a mesma utiliza o OpenApi, no qual a especificação
+é gerada e pode ser consultada utilizando o SwaggerUi, no qual a própria gera, basta acessar o endereço `host:port/swagger-ui`
+```
+http://localhost:8080/swagger-ui
+```

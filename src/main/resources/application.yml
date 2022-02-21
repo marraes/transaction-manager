@@ -6,6 +6,14 @@ micronaut:
   application:
     name: transaction-manager
     default-charset: UTF-8
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:swagger/views/swagger-ui
+        mapping: /swagger-ui/**
 
 netty:
   default:
@@ -41,6 +49,8 @@ flyway:
       enabled: true
 
 endpoints:
+  swagger:
+    enabled: true
   health:
     enabled: true
 

@@ -15,12 +15,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import transaction.manager.domain.record.TransactionRegisterRequestRecord;
 import transaction.manager.exception.EntityNotFoundException;
 import transaction.manager.service.TransactionService;
 
 @Path(ROOT)
+@Tag(name = "Transactions")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class TransactionResource {

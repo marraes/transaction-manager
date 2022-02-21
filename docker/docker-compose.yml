@@ -13,6 +13,7 @@ services:
       POSTGRES_USER: $POSTGRES_USER
   transaction-manager:
     build: .
+    restart: always
     expose:
       - 8080
     ports:

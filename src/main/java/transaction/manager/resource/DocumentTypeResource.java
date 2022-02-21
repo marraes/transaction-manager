@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.data.model.Sort;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import transaction.manager.domain.entity.DocumentType;
@@ -24,6 +25,7 @@ import transaction.manager.service.DocumentTypeService;
 
 @Slf4j
 @Path(ROOT)
+@Tag(name = "Document Types")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class DocumentTypeResource {
