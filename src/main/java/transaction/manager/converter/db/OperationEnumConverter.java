@@ -9,8 +9,8 @@ import transaction.manager.domain.enums.OperationEnum;
 public class OperationEnumConverter implements AttributeConverter<OperationEnum, Integer> {
 
     @Override
-    public Integer convertToDatabaseColumn(final OperationEnum pickType) {
-        return pickType.getCode();
+    public Integer convertToDatabaseColumn(final OperationEnum operation) {
+        return operation != null ? operation.getCode() : null;
     }
 
     @Override

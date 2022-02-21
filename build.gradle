@@ -34,6 +34,7 @@ dependencies {
 
     runtimeOnly 'io.micronaut.sql:micronaut-jdbc-hikari'
 
+    testAnnotationProcessor 'io.micronaut:micronaut-inject-java'
     testImplementation 'io.micronaut.test:micronaut-test-junit5'
     //endregion
 
@@ -52,7 +53,10 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.3.1'
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 
@@ -99,6 +103,10 @@ sourceSets {
 
 compileTestJava {
     options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 flyway {
