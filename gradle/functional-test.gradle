@@ -1,0 +1,44 @@
+apply plugin: 'idea'
+
+sourceSets {
+    functionalTest {
+        resources.srcDir file('src/functional-test/resources')
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+
+        java {
+            srcDir file('src/functional-test/java')
+        }
+    }
+}
+
+configurations {
+    functionalTestImplementation.extendsFrom testImplementation
+    functionalTestCompileOnly.extendsFrom testCompileOnly
+    functionalTestRuntimeOnly.extendsFrom testRuntimeOnly
+    functionalTestAnnotationProcessor.extendsFrom testAnnotationProcessor
+}
+
+task functionalTest(type: Test) {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+    shouldRunAfter test
+    systemProperty "micronaut.environments", "test"
+}
+
+check.dependsOn functionalTest
+
+compileFunctionalTestJava {
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        testSourceDirs += project.sourceSets.functionalTest.java.srcDirs
+        testResourceDirs += project.sourceSets.functionalTest.resources.srcDirs
+    }
+}

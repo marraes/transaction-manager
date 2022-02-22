@@ -4,8 +4,10 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.micronaut.core.annotation.Introspected;
 
+@JsonInclude
 @Introspected
 public record ResponseCollection<T>(@Nonnull List<T> data, @Nonnull Long total) {
 

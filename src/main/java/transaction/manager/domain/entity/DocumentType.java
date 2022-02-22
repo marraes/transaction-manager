@@ -35,7 +35,7 @@ public class DocumentType extends AbstractEntityDomain {
 
     @Id
     @GeneratedValue
-    @Column(name = "IDT_DOCUMENT_TYPE")
+    @Column(name = "IDT_DOCUMENT_TYPE", columnDefinition = "uuid")
     private UUID id;
 
     @Nonnull

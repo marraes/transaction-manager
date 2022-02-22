@@ -44,7 +44,6 @@ public class DocumentTypeResource {
     @GET
     @Path(DOCUMENT_TYPE_RESOURCE)
     public ResponseCollection<DocumentTypeRecord> list() {
-        log.info("test");
         final Page<DocumentType> documentTypePage = documentTypeService.findAll(UNPAGED_BY_CODE);
         final List<DocumentType> documentTypes = documentTypePage.getContent();
         final List<DocumentTypeRecord> documentTypeRecords = documentTypeMapper.map(documentTypes);
