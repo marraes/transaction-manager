@@ -1,6 +1,7 @@
 package transaction.manager.domain.entity;
 
 import java.io.Serial;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,10 +46,16 @@ public class Account extends AbstractEntityDomain {
     private String accountNumber;
 
     @Nonnull
+    @Min(0)
+    @Column(name = "NUM_BALANCE")
+    private BigDecimal balance;
+
+    @Nonnull
     @ManyToOne
     @ToString.Exclude
     @JoinColumn(name = "IDT_CUSTOMER")
     private Customer customer;
+
 
     @Override
     protected int hashCodeImpl() {

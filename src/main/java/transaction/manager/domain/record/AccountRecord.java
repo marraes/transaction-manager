@@ -1,8 +1,10 @@
 package transaction.manager.domain.record;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.micronaut.core.annotation.Introspected;
@@ -16,6 +18,8 @@ public record AccountRecord(
         @Nullable UUID id,
 
         @Schema(name = "accountNumber", description = "Uniquer number that identify an account")
-        @Nonnull String accountNumber
+        @Nonnull String accountNumber,
+
+        @Nonnull @Min(0) BigDecimal balance
 ) {
 }

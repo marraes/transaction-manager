@@ -1,5 +1,6 @@
 package transaction.manager.service;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.transaction.Transactional;
@@ -32,13 +33,14 @@ public class AccountService extends AbstractCrudService<Account> {
 
     @Nonnull
     @Transactional
-    public Account createAccount(@Nonnull final UUID customerId, @Nonnull final String accountNumber) throws EntityNotFoundException {
+    public Account createAccount(@Nonnull final UUID customerId, @Nonnull final String accountNumber, @Nonnull BigDecimal balance) throws EntityNotFoundException {
         log.info("createAccount step=start customerId={}", customerId);
         final Customer customer = customerService.findById(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Not found customer"));
         Account account = Account.builder()
                 .accountNumber(accountNumber)
                 .customer(customer)
+                .balance(balance)
                 .build();
 
         account = getRepository().save(account);
@@ -46,6 +48,13 @@ public class AccountService extends AbstractCrudService<Account> {
         log.info("createAccount step=end customerId={} accountId={}", customerId, account.getId());
 
         return account;
+    }
+
+    @Transactional
+    public Account updateBalance(final Account account, final BigDecimal transactionAmountRequested) {
+        final BigDecimal newBalanceAmount = account.getBalance().add(transactionAmountRequested);
+        account.setBalance(newBalanceAmount);
+        return save(account);
     }
 
     @Nonnull

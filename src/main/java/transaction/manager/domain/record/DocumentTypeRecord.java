@@ -2,7 +2,6 @@ package transaction.manager.domain.record;
 
 import java.util.UUID;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.micronaut.core.annotation.Introspected;
@@ -16,7 +15,7 @@ public record DocumentTypeRecord(
         UUID id,
 
         @Schema(name = "code", description = "Code 2-digits")
-        @Min(1) @Max(999) Integer code,
+        @Max(999) Integer code,
 
         @Schema(name = "description", description = "Description for DocumentType")
         String description

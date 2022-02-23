@@ -3,6 +3,7 @@ package transaction.manager.mapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ class AccountMapperTest {
                 .id(accountId)
                 .accountNumber("123456")
                 .customer(customer)
+                .balance(BigDecimal.ZERO)
                 .build();
         final AccountMapper accountMapper = new AccountMapperImpl();
 

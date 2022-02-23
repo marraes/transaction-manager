@@ -6,6 +6,7 @@ import static transaction.manager.resource.util.ApplicationPathConstants.CUSTOME
 import static transaction.manager.resource.util.ApplicationPathConstants.CUSTOMER_ID_PARAM;
 import static transaction.manager.resource.util.ApplicationPathConstants.ROOT;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
@@ -83,7 +84,7 @@ public class AccountResource {
             @Valid final AccountCreationRecord accountCreationRecord
     ) {
         try {
-            final Account account = accountService.createAccount(customerId, accountCreationRecord.accountNumber());
+            final Account account = accountService.createAccount(customerId, accountCreationRecord.accountNumber(), accountCreationRecord.balance());
 
             return accountMapper.map(account);
         } catch (EntityNotFoundException e) {
@@ -129,7 +130,7 @@ public class AccountResource {
     @Introspected
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Schema(name = "AccountRequest", description = "Object with args to create a new account")
-    public static record AccountCreationRecord(@Nonnull String accountNumber) {
+    public static record AccountCreationRecord(@Nonnull String accountNumber, @Nonnull BigDecimal balance) {
     }
 
 }

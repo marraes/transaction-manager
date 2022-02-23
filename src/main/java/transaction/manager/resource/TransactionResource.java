@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import transaction.manager.domain.record.TransactionRegisterRequestRecord;
 import transaction.manager.exception.EntityNotFoundException;
+import transaction.manager.exception.TransactionValidationException;
 import transaction.manager.resource.doc.openapi.TagNameConstants;
 import transaction.manager.resource.doc.openapi.annotation.ApiBadRequestErrorResponse;
 import transaction.manager.resource.doc.openapi.annotation.ApiNotFoundErrorResponse;
@@ -72,7 +73,7 @@ public class TransactionResource {
                     )
             )
             @Valid final TransactionRegisterRequestRecord transactionRecord
-    ) {
+    ) throws TransactionValidationException {
         try {
             transactionService.registerTransaction(accountId, transactionRecord);
         } catch (EntityNotFoundException e) {
