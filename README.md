@@ -70,3 +70,8 @@ Caso deseje verificar as especificações das APIs da aplicação, a mesma utili
 ```
 http://localhost:8080/swagger-ui
 ```
+
+---
+
+#### Testes
+Seria possível aumentar a cobertura de testes, mas deixei alguns exemplos de cada tipo.
