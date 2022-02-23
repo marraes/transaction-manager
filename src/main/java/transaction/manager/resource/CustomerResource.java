@@ -12,6 +12,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import org.apache.commons.lang3.ObjectUtils;
@@ -20,10 +25,15 @@ import transaction.manager.domain.record.CustomerRecord;
 import transaction.manager.domain.record.DocumentTypeRecord;
 import transaction.manager.exception.EntityNotFoundException;
 import transaction.manager.mapper.CustomerMapper;
+import transaction.manager.resource.doc.openapi.TagNameConstants;
+import transaction.manager.resource.doc.openapi.annotation.ApiBadRequestErrorResponse;
+import transaction.manager.resource.doc.openapi.annotation.ApiNotFoundErrorResponse;
+import transaction.manager.resource.doc.openapi.annotation.ApiUnexpectedErrorResponse;
 import transaction.manager.service.CustomerService;
 
 @Path(ROOT)
-@Tag(name = "Customers")
+@ApiUnexpectedErrorResponse
+@Tag(name = TagNameConstants.CUSTOMER)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class CustomerResource {
@@ -39,7 +49,23 @@ public class CustomerResource {
 
     @POST
     @Path(CUSTOMER_RESOURCE)
-    public CustomerRecord create(@Valid final CustomerRecord customerRecord) {
+    @Operation(
+            summary = "Create a new customer",
+            description = "Create a new account",
+            operationId = "createCustomer"
+    )
+    @ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(name = "Customer", implementation = CustomerRecord.class)))
+    @ApiBadRequestErrorResponse
+    @ApiNotFoundErrorResponse
+    public CustomerRecord create(
+            @RequestBody(
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON,
+                            schema = @Schema(name = "Customer", implementation = CustomerRecord.class)
+                    )
+            )
+            @Valid final CustomerRecord customerRecord
+    ) {
         final DocumentTypeRecord documentTypeRecord = customerRecord.documentType();
 
         if (ObjectUtils.anyNull(documentTypeRecord, documentTypeRecord.id())) {

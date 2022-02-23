@@ -6,6 +6,7 @@ import static transaction.manager.resource.util.ApplicationPathConstants.API_ROO
 import static transaction.manager.resource.util.ApplicationPathConstants.DOCUMENT_TYPE_RESOURCE;
 
 import java.util.List;
+import javax.persistence.EntityManager;
 
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
@@ -15,8 +16,10 @@ import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import transaction.manager.domain.entity.DocumentType;
+import transaction.manager.domain.record.DocumentTypeRecord;
 import transaction.manager.domain.record.ResponseCollection;
 import transaction.manager.repository.DocumentTypeRepository;
 
@@ -30,9 +33,9 @@ class DocumentTypeResourceFunctionalTest {
     @Inject
     private DocumentTypeRepository documentTypeRepository;
 
-    /**
-     * It isn't with @BeforeEach, because Micronaut put in the same transaction and doesn't do the rollback
-     */
+    @Inject
+    private EntityManager entityManager;
+
     private void setup() {
         documentTypeRepository.saveAll(
                 List.of(
@@ -46,12 +49,18 @@ class DocumentTypeResourceFunctionalTest {
                                 .build()
                 )
         );
+        entityManager.getTransaction().commit();
+    }
+
+    @AfterEach
+    private void cleanup() {
+        documentTypeRepository.deleteAll();
     }
 
     @Test
     void whenRequestListOfDocumentTypeAndNoData_thenReturnEmpty() {
         HttpResponse<ResponseCollection> response = doRequest();
-        ResponseCollection<DocumentType> responseCollection = response.body();
+        ResponseCollection<DocumentTypeRecord> responseCollection = response.body();
 
         assertEquals(HttpStatus.OK, response.getStatus());
         assertNotNull(responseCollection);
@@ -62,19 +71,24 @@ class DocumentTypeResourceFunctionalTest {
     @Test
     void whenRequestListOfDocumentTypeWithData_thenReturnCorrectly() {
         setup();
+
         HttpResponse<ResponseCollection> response = doRequest();
-        ResponseCollection<DocumentType> responseCollection = response.body();
+        ResponseCollection<DocumentTypeRecord> responseCollection = response.body();
 
         assertEquals(HttpStatus.OK, response.getStatus());
         assertNotNull(responseCollection);
         assertEquals(2, responseCollection.total());
-        assertEquals(0, responseCollection.data().size());
+        assertEquals(2, responseCollection.data().size());
+        assertEquals(1, responseCollection.data().get(0).code());
+        assertEquals("ID", responseCollection.data().get(0).description());
+        assertEquals(2, responseCollection.data().get(1).code());
+        assertEquals("CPF", responseCollection.data().get(1).description());
     }
 
     private HttpResponse<ResponseCollection> doRequest() {
-        HttpRequest<ResponseCollection> request = HttpRequest.GET(API_ROOT + DOCUMENT_TYPE_RESOURCE);
+        HttpRequest<ResponseCollection<DocumentTypeRecord>> request = HttpRequest.GET(API_ROOT + DOCUMENT_TYPE_RESOURCE);
 
-        return client.toBlocking().exchange(request, Argument.of(ResponseCollection.class));
+        return client.toBlocking().exchange(request, Argument.of(ResponseCollection.class, DocumentTypeRecord.class));
     }
 
 }

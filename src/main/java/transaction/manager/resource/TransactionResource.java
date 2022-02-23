@@ -15,14 +15,26 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import transaction.manager.domain.record.TransactionRegisterRequestRecord;
 import transaction.manager.exception.EntityNotFoundException;
+import transaction.manager.resource.doc.openapi.TagNameConstants;
+import transaction.manager.resource.doc.openapi.annotation.ApiBadRequestErrorResponse;
+import transaction.manager.resource.doc.openapi.annotation.ApiNotFoundErrorResponse;
+import transaction.manager.resource.doc.openapi.annotation.ApiUnexpectedErrorResponse;
 import transaction.manager.service.TransactionService;
 
 @Path(ROOT)
-@Tag(name = "Transactions")
+@ApiUnexpectedErrorResponse
+@Tag(name = TagNameConstants.TRANSACTION)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class TransactionResource {
@@ -36,7 +48,31 @@ public class TransactionResource {
 
     @POST
     @Path(CUSTOMER_ACCOUNT_ID_TRANSACTION_RESOURCE)
-    public void registerTransaction(@PathParam(ACCOUNT_ID_PARAM) @Nonnull final UUID accountId, @Valid final TransactionRegisterRequestRecord transactionRecord) {
+    @Operation(
+            summary = "Register a transaction",
+            description = "Register a new transaction for a determined account",
+            operationId = "registerTransaction"
+    )
+    @ApiResponse(responseCode = "200", description = "Transaction received successfully")
+    @ApiBadRequestErrorResponse
+    @ApiNotFoundErrorResponse
+    public void registerTransaction(
+            @Parameter(
+                    name = ACCOUNT_ID_PARAM,
+                    in = ParameterIn.PATH,
+                    description = "Account identifier",
+                    required = true, schema = @Schema(format = "uuid", type = "string")
+            )
+            @PathParam(ACCOUNT_ID_PARAM) @Nonnull final UUID accountId,
+
+            @RequestBody(
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON,
+                            schema = @Schema(name = "TransactionRegisterRequest", implementation = TransactionRegisterRequestRecord.class)
+                    )
+            )
+            @Valid final TransactionRegisterRequestRecord transactionRecord
+    ) {
         try {
             transactionService.registerTransaction(accountId, transactionRecord);
         } catch (EntityNotFoundException e) {
