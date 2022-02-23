@@ -4,7 +4,7 @@ Aplicação em Java utilizando [Micronaut](https://micronaut.io) simulando rotin
 
 ---
 
-####Requisitos para buildar e executar
+#### Requisitos para buildar e executar
 
 - [JDK 17](https://adoptium.net/)
   - Se preferir pode ser utilizado uma ferramenta de gerenciamento de versões como o [skdman](https://sdkman.io/)
