@@ -12,7 +12,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +21,6 @@ import transaction.manager.domain.entity.generic.AbstractEntityDomain;
 @Getter
 @Setter
 @Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
